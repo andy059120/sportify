@@ -2,7 +2,7 @@ import React from "react";
 
 const Sider = () => {
   return (
-    <ul className="menu bg-base-200 rounded-box w-80 h-[calc(100vh-35px)]">
+    <ul className="menu  menu-lg bg-base-200 rounded-box w-80 h-[calc(100vh-35px)]">
       <li>
         <a>
           <svg
