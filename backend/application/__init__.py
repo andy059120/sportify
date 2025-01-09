@@ -158,5 +158,35 @@ def create_app():
             print(f"Error: {e}")
             return jsonify({"error": str(e)}), 500
 
+    @app.route('/api/cancel_signup_event', methods=['DELETE'])
+    def cancel_signup_event():
+        try:
+            data = request.get_json()
+            if not data:
+                abort(400, description="Invalid JSON payload")
+
+            # Extract and validate fields
+            user_id = data.get('userId')
+            event_id = data.get('eventId')
+
+            if not all([user_id, event_id]):
+                abort(400, description="Missing required fields")
+
+            # Check if the signup exists
+            signup = SIGNUP_RECORD.query.filter_by(SIGN_USER=user_id, SIGN_EVENT=event_id).first()
+            if not signup:
+                return jsonify({"message": "Signup record not found."}), 404
+
+            # Delete the signup record
+            db.session.delete(signup)
+            db.session.commit()
+
+            # Return a success message
+            return jsonify({"message": "Signup successfully canceled."}), 200
+
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error: {e}")
+            return jsonify({"error": str(e)}), 500
 
     return app
