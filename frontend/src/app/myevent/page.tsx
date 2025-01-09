@@ -43,7 +43,7 @@ export default function Homepage() {
 
   return (
     <div>
-      <h1 className="px-4">所有揪團資訊</h1>
+      <h1 className="px-4">我的報名資訊</h1>
       <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
@@ -109,8 +109,8 @@ export default function Homepage() {
               <p className="py-2">地點：{selectedEvent.location}</p>
               <hr />
             </div>
-            <button className="btn btn-warning min-w-[150px] text-lg flex-shrink-0">
-              加入揪團
+            <button className="btn btn-error  min-w-[150px] text-lg flex-shrink-0">
+              取消揪團
             </button>
           </div>
         </div>
