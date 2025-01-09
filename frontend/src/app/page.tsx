@@ -41,6 +41,32 @@ export default function Homepage() {
     setSelectedEvent(null);
   };
 
+  const handleSignup = () => {
+    if (!selectedEvent) return;
+
+    const userId = "chen_0307"; // 您需要用實際的用戶 ID 替換此部分
+
+    fetch("http://localhost:8000/api/signup_events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: userId,
+        eventId: selectedEvent.id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Signup successful:", data);
+        // 可以在這裡顯示提示，或更新 UI 以顯示已報名
+        setSelectedEvent(null); // 重新關閉模態框
+      })
+      .catch((error) => {
+        console.error("Error during signup:", error);
+      });
+  };
+
   return (
     <div>
       <h1 className="px-4">所有揪團資訊</h1>
@@ -107,7 +133,10 @@ export default function Homepage() {
               <p className="py-2">地點：{selectedEvent.location}</p>
               <hr />
             </div>
-            <button className="btn btn-warning min-w-[150px] text-lg flex-shrink-0">
+            <button
+              className="btn btn-warning min-w-[150px] text-lg flex-shrink-0"
+              onClick={handleSignup}
+            >
               加入揪團
             </button>
           </div>

@@ -117,5 +117,46 @@ def create_app():
             db.session.rollback()
             print(f"Error: {e}")
             return jsonify({"error": str(e)}), 500
+    
+     # API 路由：報名活動
+    @app.route('/api/signup_events', methods=['POST'])
+    def signup_event():
+        try:
+            data = request.get_json()
+            if not data:
+                abort(400, description="Invalid JSON payload")
+
+            # 提取並驗證字段
+            user_id = data.get('userId')
+            event_id = data.get('eventId')
+
+            if not all([user_id, event_id]):
+                abort(400, description="Missing required fields")
+
+            # 檢查活動是否存在
+            event = EVENT_LIST.query.get(event_id)
+            if not event:
+                abort(404, description="Event not found")
+
+            # 檢查用戶是否已報名該活動
+            existing_signup = SIGNUP_RECORD.query.filter_by(SIGN_USER=user_id, SIGN_EVENT=event_id).first()
+            if existing_signup:
+                return jsonify({"message": "User has already signed up for this event."}), 400
+
+            # 創建報名記錄
+            signup = SIGNUP_RECORD(SIGN_USER=user_id, SIGN_EVENT=event_id)
+
+            # 儲存報名到資料庫
+            db.session.add(signup)
+            db.session.commit()
+
+            # 返回創建的報名記錄
+            return jsonify(signup.to_dict()), 201
+
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error: {e}")
+            return jsonify({"error": str(e)}), 500
+
 
     return app
