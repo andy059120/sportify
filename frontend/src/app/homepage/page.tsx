@@ -1,3 +1,4 @@
+
 "use client";
 import { useEffect, useState } from "react";
 
@@ -31,6 +32,7 @@ export default function Homepage() {
         console.error("There was a problem with the fetch operation:", error);
       });
   }, []);
+
 
   return (
     <div>
