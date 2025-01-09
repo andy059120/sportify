@@ -1,54 +1,37 @@
-import Image from "next/image";
-
-const events = [
-  {
-    id: 1,
-    host: "chang_0607",
-    date: "2024-10-10",
-    startTime: "17:00:00",
-    endTime: "19:00:00",
-    description: "籃球(半場)",
-    location: "河堤籃球場",
-  },
-  {
-    id: 2,
-    host: "shaw_0109",
-    date: "2024-10-30",
-    startTime: "14:00:00",
-    endTime: "16:00:00",
-    description: "網球",
-    location: "四維網球場",
-  },
-  {
-    id: 3,
-    host: "JC_0628",
-    date: "2024-10-21",
-    startTime: "18:30:00",
-    endTime: "21:00:00",
-    description: "籃球(全場)",
-    location: "體育館籃球場",
-  },
-  {
-    id: 4,
-    host: "mai_1228",
-    date: "2024-10-19",
-    startTime: "20:00:00",
-    endTime: "22:00:00",
-    description: "羽球",
-    location: "萬興國小羽球場",
-  },
-  {
-    id: 5,
-    host: "wu_0905",
-    date: "2024-10-27",
-    startTime: "09:00:00",
-    endTime: "12:00:00",
-    description: "排球",
-    location: "五期排球場",
-  },
-];
+"use client";
+import { useEffect, useState } from "react";
 
 export default function Homepage() {
+  interface Event {
+    id: number;
+    host: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+    description: string;
+    location: string;
+  }
+
+  const [events, setEvents] = useState<Event[]>([]);
+
+  useEffect(() => {
+    // 呼叫後端 API 取得事件資料
+    fetch("http://localhost:8000/api/events")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json(); // 解析 JSON 格式的回應
+      })
+      .then((data) => {
+        console.log(data); // 顯示取得的資料
+        setEvents(data);
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  }, []);
+
   return (
     <div>
       <h1 className="px-4">EVENT LIST</h1>
