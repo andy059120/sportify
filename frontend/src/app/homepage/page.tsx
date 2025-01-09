@@ -56,7 +56,6 @@ export default function Homepage() {
               <th>END TIME</th>
               <th>LOCATION</th>
               <th>DESCRIPTION</th>
-              <th>SIGN UP TIME</th>
             </tr>
           </thead>
           <tbody>
@@ -74,7 +73,6 @@ export default function Homepage() {
                 <td>{event.endTime}</td>
                 <td>{event.location}</td>
                 <td>{event.description}</td>
-                <td>{event.endTime}</td>
               </tr>
             ))}
           </tbody>

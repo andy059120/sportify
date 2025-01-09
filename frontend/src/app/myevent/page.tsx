@@ -116,6 +116,8 @@ export default function Homepage() {
               <hr />
               <p className="py-2">地點：{selectedEvent.event.location}</p>
               <hr />
+              <p className="py-2">報名時間：{selectedEvent.sign_time}</p>
+              <hr />
             </div>
             <button className="btn btn-error  min-w-[150px] text-lg flex-shrink-0">
               取消揪團

@@ -52,7 +52,7 @@ const Sider = () => {
         </a>
       </li>
       <li>
-        <a>
+        <a onClick={() => handleNavigation("/addevent")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
