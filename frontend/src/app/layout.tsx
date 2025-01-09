@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="zh-TW">
       <body className="flex flex-row justify-start w-full gap-4 p-4">
         <Sider />
-        <div className="w-full">
+        <div className="w-full ">
           <Header />
           {children}
         </div>

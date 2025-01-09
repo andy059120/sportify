@@ -68,7 +68,7 @@ export default function Homepage() {
   };
 
   return (
-    <div>
+    <div className="p-4"> 
       <h1 className="px-4">所有揪團資訊</h1>
       <div className="overflow-x-auto">
         <table className="table">
