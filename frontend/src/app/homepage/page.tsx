@@ -32,9 +32,16 @@ export default function Homepage() {
       });
   }, []);
 
+  const handleRowClick = () => {
+    const modal = document.getElementById("my_modal_3");
+    if (modal) {
+      (modal as HTMLDialogElement).showModal();
+    }
+  };
+
   return (
     <div>
-      <h1 className="px-4">EVENT LIST</h1>
+      <h1 className="px-4">所有揪團資訊</h1>
       <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
@@ -52,15 +59,50 @@ export default function Homepage() {
           <tbody>
             {/* Map over events to generate rows */}
             {events.map((event) => (
-              <tr className="hover" key={event.id}>
-                <th>{event.id}</th>
-                <td>{event.host}</td>
-                <td>{event.date}</td>
-                <td>{event.startTime}</td>
-                <td>{event.endTime}</td>
-                <td>{event.location}</td>
-                <td>{event.description}</td>
-              </tr>
+              <>
+                <tr
+                  className="hover cursor-pointer"
+                  key={event.id}
+                  onClick={handleRowClick} // 使用處理函數
+                >
+                  <th>{event.id}</th>
+                  <td>{event.host}</td>
+                  <td>{event.date}</td>
+                  <td>{event.startTime}</td>
+                  <td>{event.endTime}</td>
+                  <td>{event.location}</td>
+                  <td>{event.description}</td>
+                </tr>
+                <dialog id="my_modal_3" className="modal">
+                  <div className="modal-box">
+                    <form method="dialog">
+                      {/* if there is a button in form, it will close the modal */}
+                      <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                        ✕
+                      </button>
+                    </form>
+                    <h3 className="font-bold text-lg">揪團資訊</h3>
+                    <div className="my-4 p-4 flex flex-col  bg-base-200 rounded-lg">
+                      <p className="py-2">團長：{event.host}</p>
+                      <hr />
+                      <p className="py-2">揪團活動：{event.description}</p>
+                      <hr />
+                      <p className="py-2">日期：{event.date}</p>
+                      <hr />
+                      <p className="py-2">
+                        時間：{event.startTime} - {event.endTime}
+                      </p>
+                      <hr />
+                      <p className="py-2">地點：{event.location}</p>
+
+                      <hr />
+                    </div>
+                    <button className="btn btn-warning ml-80 min-w-[150px] text-lg flex-shrink-0">
+                      加入揪團
+                    </button>
+                  </div>
+                </dialog>
+              </>
             ))}
           </tbody>
         </table>
