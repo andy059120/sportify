@@ -28,6 +28,24 @@ class EVENT_LIST(db.Model):
             "location": self.EVENT_LOCATION
         }
 
+class SIGNUP_RECORD(db.Model):
+    __tablename__ = 'signup_record'
+    
+    SIGN_ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    SIGN_USER = db.Column(db.String(12), nullable=False)
+    SIGN_EVENT = db.Column(db.Integer, db.ForeignKey('event_list.EVENT_ID'), nullable=False)
+    SIGN_TIME = db.Column(db.TIMESTAMP, nullable=False, default=db.func.current_timestamp())
+
+    event = db.relationship('EVENT_LIST', backref='signups')
+
+    def to_dict(self):
+        return {
+            "sign_id": self.SIGN_ID,
+            "sign_user": self.SIGN_USER,
+            "sign_time": self.SIGN_TIME.strftime('%Y-%m-%d %H:%M:%S'),
+            "event": self.event.to_dict()
+        }
+
 def create_app():
     app = Flask(__name__)
 
@@ -52,5 +70,14 @@ def create_app():
         
         # 將資料轉換成 JSON 格式
         return jsonify([event.to_dict() for event in events])
+    
+    @app.route('/api/signup_events/<user_id>', methods=['GET'])
+    def get_signup_events(user_id):
+        # 使用 SQLAlchemy 查詢特定使用者的報名紀錄，並且 JOIN 活動資料
+        signups = SIGNUP_RECORD.query.filter_by(SIGN_USER=user_id).join(EVENT_LIST).all()
+
+        # 將資料轉換成 JSON 格式並回傳
+        return jsonify([signup.to_dict() for signup in signups])
+
 
     return app
