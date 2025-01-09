@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "./component/header";
 import Sider from "./component/sider";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,13 +15,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-row justify-start w-full gap-4 p-4 ">
-      <Sider />
-      <div lang="en" className="w-full">
-        <Header />
-
-        {children}
-      </div>
-    </div>
+    <html lang="zh-TW">
+      <body className="flex flex-row justify-start w-full gap-4 p-4">
+        <Sider />
+        <div className="w-full">
+          <Header />
+          {children}
+        </div>
+      </body>
+    </html>
   );
 }

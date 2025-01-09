@@ -16,24 +16,38 @@ export default function Homepage() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("18:00");
+  const [event, setEvent] = useState("");
+  const [location, setLocation] = useState("");
+  const [date, setDate] = useState("");
+  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    // 呼叫後端 API 取得事件資料
-    fetch("http://localhost:8000/api/events")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json(); // 解析 JSON 格式的回應
-      })
-      .then((data) => {
-        console.log(data); // 顯示取得的資料
-        setEvents(data);
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
+  const handleSubmit = async () => {
+    try {
+      // 發送 POST 請求到 API
+      console.log(date, startTime, endTime, event, location);
+      const response = await fetch("http://localhost:8000/api/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date: date,
+          startTime: startTime.length === 5 ? `${startTime}:00` : startTime,
+          endTime: endTime.length === 5 ? `${endTime}:00` : endTime,
+          description: event,
+          location: location,
+          host: "chen_0307",
+        }),
       });
-  }, []);
+
+      const data = await response.json();
+      if (response.ok) {
+        setMessage("活動新增成功！");
+      } else {
+        setMessage(`新增失敗：${data.message}`);
+      }
+    } catch (error) {
+      setMessage(`錯誤：${(error as any).message}`);
+    }
+  };
 
   const handleRowClick = (event: Event) => {
     setSelectedEvent(event);
@@ -47,28 +61,52 @@ export default function Homepage() {
     <div>
       <div className="flex justify-between items-center">
         <h1 className="px-4">新增一筆揪團</h1>
-        <button className="btn ">新增一筆揪團</button>
+        <button onClick={handleSubmit} className="btn ">
+          新增一筆揪團
+        </button>
       </div>
       <div className="overflow-x-auto px-4">
         <label className="form-control w-full max-w-xs py-2">
           <div className="label">
             <span className="label-text">揪團內容</span>
           </div>
-          <input
-            type="text"
-            placeholder="輸入揪團內容"
-            className="input input-bordered w-full max-w-xs"
-          />
+          <select
+            className="select select-bordered w-full max-w-xs"
+            value={event}
+            onChange={(e) => setEvent(e.target.value)}
+          >
+            <option value="" disabled>
+              揪團內容
+            </option>
+            <option value="籃球(全場)">籃球(全場)</option>
+            <option value="籃球(半場)">籃球(半場)</option>
+            <option value="羽球">羽球</option>
+            <option value="桌球">桌球</option>
+            <option value="網球">網球</option>
+            <option value="排球">排球</option>
+            <option value="足球">足球</option>
+          </select>
         </label>
         <label className="form-control w-full max-w-xs py-2">
           <div className="label">
             <span className="label-text">揪團場地</span>
           </div>
-          <input
-            type="text"
-            placeholder="輸入揪團場地"
-            className="input input-bordered w-full max-w-xs"
-          />
+          <select
+            className="select select-bordered w-full max-w-xs"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          >
+            <option value="" disabled>
+              揪團場地
+            </option>
+            <option value="河堤籃球場">河堤籃球場</option>
+            <option value="河堤棒球場">河堤棒球場</option>
+            <option value="四維網球場">四維網球場</option>
+            <option value="體育館桌球室">體育館桌球室</option>
+            <option value="萬興國小羽球場">萬興國小羽球場</option>
+            <option value="體育館籃球場">體育館籃球場</option>
+            <option value="五期排球場">五期排球場</option>
+          </select>
         </label>
         <label className="form-control w-full max-w-xs py-2">
           <div className="label">
@@ -92,6 +130,8 @@ export default function Homepage() {
               type="date"
               className="cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Select date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
             />
           </div>
         </label>
@@ -126,7 +166,7 @@ export default function Homepage() {
               onChange={(e) => setEndTime(e.target.value)}
               required
             />
-          </label>
+          </label>{" "}
         </div>
       </div>
     </div>
