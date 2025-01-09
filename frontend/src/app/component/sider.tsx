@@ -14,7 +14,7 @@ const Sider = () => {
   return (
     <ul className="menu  menu-lg bg-base-200 rounded-box w-80 h-[calc(100vh-35px)]">
       <li>
-        <a onClick={() => handleNavigation("/homepage")}>
+        <a onClick={() => handleNavigation("/")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
